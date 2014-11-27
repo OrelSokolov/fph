@@ -17,6 +17,7 @@ GEM
       oj (~> 2.0)
     ffi (1.9.6)
     hashie (3.3.2)
+    headless (1.0.2)
     jwt (1.2.0)
     mini_portile (0.6.0)
     multi_json (1.10.1)
@@ -60,6 +61,7 @@ PLATFORMS
 DEPENDENCIES
   colorize
   daemons (~> 1.1.9)
+  headless
   nokogiri
   redis
   vkontakte_api (~> 1.4)
