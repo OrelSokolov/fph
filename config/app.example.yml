@@ -1,0 +1,13 @@
+
+AUTH_URL_BASE: 'https://oauth.vk.com/authorize?'
+APP_ID: 'your app id here'
+PERMISSIONS: '8196'
+REDIRECT_URI: 'https://oauth.vk.com/blank.html'
+DISPLAY: 'mobile'
+API_VERSION: '5.27'
+
+groups:
+  - 12
+  - 15
+  - 18
+

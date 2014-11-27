@@ -1,0 +1,4 @@
+config/auth.yml
+config/app.yml
+
+*.pid
