@@ -1,6 +1,8 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
+ruby '2.1.5'
+
 gem 'vkontakte_api', '~> 1.4'
 gem 'whenever', '~> 0.9.4'
 gem 'redis'
