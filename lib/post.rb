@@ -13,6 +13,8 @@ VkontakteApi.configure do |config|
 end
 
 class Poster
+  class NothingToPost < Exception; end
+
   def initialize
     token = VkAuth.new.token
     puts "TOKEN: #{token}"
@@ -25,7 +27,7 @@ class Poster
     unless album.nil?
       album
     else
-      raise RuntimeError, "No main album in #{gid}"
+      raise NothingToPost, "No main album in #{gid}"
     end
   end
 
@@ -46,24 +48,5 @@ class Poster
       document.css("br").each { |node| node.replace("\n") }
       document.text
     end
-
-end
-
-
-
-Daemons.run_proc('poster.rb') do
-
-  loop do
-    p = Poster.new
-    CONFIG['groups'].each do |gid|
-      aid  = p.main_album(gid).aid
-      photos = p.photos gid, aid
-      unless photos.empty?
-        p.post(gid, photos.sample)
-        puts "Posted to group #{gid}\n\n"
-      end
-    end
-    sleep 3600
-  end
 
 end

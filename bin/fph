@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+require 'daemons'
+require 'colorize'
+require_relative '../lib/post'
+
+loop do
+  p = Poster.new
+  CONFIG['groups'].each do |gid|
+    begin
+      aid  = p.main_album(gid).aid
+      photos = p.photos gid, aid
+      unless photos.empty?
+        p.post(gid, photos.sample)
+        puts "Posted to group #{gid}\n\n"
+      end
+    rescue Poster::NothingToPost
+      puts "Nothing to post in group: https://vk.com/club#{gid}".red
+    rescue Exception => e
+      puts "Exception: #{e}".red
+      puts e.backtrace.map(&:to_s).map(&:yellow)
+    end
+  end
+  sleep 3600
+end
