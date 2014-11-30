@@ -3,6 +3,25 @@
 require 'daemons'
 require 'colorize'
 require_relative '../lib/post'
+require 'optparse'
+
+@root = File.expand_path File.join(File.dirname(__FILE__), '../')
+
+options = {}
+OptionParser.new do |opts|
+  opts.on("--log", "Redirect stdout && stderr to log files") do
+    options[:log] = true
+  end
+end.parse!
+
+if options[:log]
+  log_file = File.open("#{@root}/log/fph.log", "a")
+  $stderr = log_file
+  $stdout = log_file
+  $stdout.sync = true
+  $stderr.sync = true
+  puts 'Start logging'
+end
 
 loop do
   p = Poster.new
