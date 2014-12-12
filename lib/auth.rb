@@ -29,15 +29,38 @@ class VkAuth
   end
 
   private
+
+    def sliced_number browser
+      number  = @auth_config['number'].to_s.delete('+')
+      prefix  = browser.spans(:class => 'field_prefix').first.text.delete('+').strip
+      postfix = browser.spans(:class => 'field_prefix').last.text.strip
+      puts prefix
+      puts postfix
+      number[prefix.length..-(postfix.length+1)]
+    end
+
     def get_token
       headless = Headless.new
       headless.start
+      # profile = Selenium::WebDriver::Firefox::Profile.new
+      # profile["network.proxy.socks"] =  "127.0.0.1"
+      # profile["network.proxy.socks_port"] = 9050
+      # profile["network.proxy.socks_remote_dns"] = true
+      # profile["network.proxy.socks_version"] = 4
+      # profile["network.proxy.type"] = 1
+
+      # browser = Watir::Browser.new :firefox, :profile => profile
       browser = Watir::Browser.new
+
       browser.goto URL
       browser.input
       browser.text_field(:name => 'email').set @auth_config['login']
       browser.text_field(:name => 'pass').set @auth_config['pass']
       browser.input(:type => 'submit').click
+      if browser.url.include?  'security_check'
+        browser.text_field(:name => 'code').set sliced_number(browser)
+        browser.input(:type => 'submit').click # Allow
+      end
       unless browser.url.include? CONFIG['REDIRECT_URI']
         browser.input(:type => 'submit').click # Allow
       end
